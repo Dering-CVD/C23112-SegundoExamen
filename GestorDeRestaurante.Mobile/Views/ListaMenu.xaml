@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GestorDeRestaurante.Mobile.Views.ListaMenu"
+             Title="Menú">
+
+    <Grid RowDefinitions="Auto,*" Padding="16">
+
+        <SearchBar x:Name="SearchBar"
+                   Grid.Row="0"
+                   Placeholder="Buscar platillo por nombre..."
+                   TextChanged="OnTextChanged" />
+
+        <CollectionView x:Name="MenuCollectionView"
+                        Grid.Row="1"
+                        SelectionMode="Single"
+                        SelectionChanged="OnPlatilloSelected">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="12" Margin="0,4" Stroke="LightGray" StrokeShape="RoundRectangle 8">
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                            <Label Text="{Binding Nombre}"
+               FontSize="18" FontAttributes="Bold"
+               Grid.Row="0" Grid.Column="0" />
+
+                            <Label Text="{Binding PrecioDeVenta, StringFormat='₡{0:N2}'}"
+               FontSize="16" TextColor="Green"
+               Grid.Row="0" Grid.Column="1" />
+
+                            <Label Text="{Binding Descripcion}"
+               FontSize="13" TextColor="DimGray"
+               LineBreakMode="TailTruncation" MaxLines="2"
+               Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" />
+
+                            <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+               FontSize="12" TextColor="Gray">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding Categoria}" />
+                                        <Span Text=" — " />
+                                        <Span Text="{Binding Estado}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.EmptyView>
+                <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                    <Label x:Name="EmptyMessage"
+                           Text="Cargando..."
+                           FontSize="16"
+                           HorizontalTextAlignment="Center"
+                           TextColor="Gray" />
+                </StackLayout>
+            </CollectionView.EmptyView>
+        </CollectionView>
+
+        <ActivityIndicator x:Name="LoadingIndicator"
+                           IsRunning="True" IsVisible="True"
+                           VerticalOptions="Center" HorizontalOptions="Center"
+                           Grid.Row="1" />
+
+    </Grid>
+
+</ContentPage>

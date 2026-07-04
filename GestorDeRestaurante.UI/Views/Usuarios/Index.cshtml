@@ -1,0 +1,71 @@
+﻿@model IEnumerable<GestorDeRestaurante.Dominio.Dtos.ListarUsuarioDto>
+
+@{
+    ViewData["Title"] = "Gestión de Usuarios";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 style="font-weight: 700; font-size: 1.5rem; margin: 0;">Usuarios</h2>
+        <p class="text-dim">Módulo para administrar el acceso y los permisos de los usuarios del sistema.</p>
+    </div>
+    <a asp-action="Crear" class="btn-saas text-decoration-none" style="display: inline-flex; align-items: center; gap: 8px;">
+        <i class="bi bi-plus-circle"></i> Nuevo usuario
+    </a>
+</div>
+
+<div class="mb-4">
+    <form asp-action="Index" method="get" class="d-flex gap-2">
+        <div class="position-relative flex-grow-1" style="max-width: 400px;">
+            <i class="bi bi-search position-absolute" style="left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 0.9rem;"></i>
+            <input name="filtro" type="text" class="form-control bg-dark text-white border-secondary ps-5"
+                   placeholder="Buscar por nombre..."
+                   style="font-size: 0.85rem; height: 38px; --bs-secondary-color: var(--text-secondary); --bs-form-control-bg: var(--bg-card);"/>
+        </div>
+        <button type="submit" class="btn-saas px-3 text-decoration-none"> Filtrar</button>
+    </form>
+</div>
+
+<div class="saas-card p-0 overflow-hidden" style="padding: 0; border-radius: 8px;">
+
+    <div class="d-flex align-items-center px-3 py-2 border-bottom flex-shrink-0 text-center"
+         style="border-color: var(--border-color) !important; background-color: rgba(255,255,255,0.03); font-size: 0.7rem; 
+                color: var(--text-secondary); font-weight: 600;">
+        <div style="width: 10%">Identificación</div>
+        <div style="width: 15%">Nombre</div>
+        <div style="width: 15%">Apellidos</div>
+        <div style="width: 35%">Correo electrónico</div>
+        <div style="width: 15%">Rol</div>
+        <div style="width: 10%">Acciones</div>
+    </div>
+
+    <div class="list-group list-group-flush">
+        @foreach (var usuario in Model)
+        {
+            <div class="list-group-item bg-transparent border-secondary d-flex align-items-center px-3 py-3 flex-shrink-0 text-center"
+                 style="border-color: var(--border-color) !important; cursor: default; font-size: 0.85rem; color: var(--text-primary);">
+
+                <div style="width: 10%">@usuario.Identificacion</div>
+                <div style="width: 15%">@usuario.Nombre</div>
+                <div style="width: 15%">@usuario.Apellidos</div>
+                <div style="width: 35%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">@usuario.Email</div>
+                <div style="width: 15%">@usuario.Rol</div>
+                <div class="flex-shrink-0 text-center" style="width: 10%">
+                    <a asp-action="Editar" asp-route-id="@usuario.Id"
+                       class="btn btn-sm btn-outline-info px-2 py-1"
+                       style="font-size: 0.8rem; border-radius: 4px;">
+                        <i class="bi bi-pencil-square"></i> Editar
+                    </a>
+                </div>
+            </div>
+        }
+
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5 text-dim" style="font-size: 0.85rem;">
+                <i class="bi bi-people d-block mb-2" style="font-size: 2rem; opacity: 0.5;"></i>
+                No se encontraron usuarios registrados.
+            </div>
+        }
+    </div>
+</div>

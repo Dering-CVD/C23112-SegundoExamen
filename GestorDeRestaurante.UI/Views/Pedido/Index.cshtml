@@ -1,0 +1,120 @@
+﻿@model IEnumerable<GestorDeRestaurante.Dominio.Entidades.Pedido>
+
+@{
+    ViewData["Title"] = "Gestión de pedidos";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 style="font-weight: 700; font-size: 1.5rem; margin: 0;">Gestión de pedidos</h2>
+        <p class="text-dim">Módulo para registrar, modificar y realizar el seguimiento de los pedidos del restaurante.</p>
+    </div>
+    <a asp-action="Create" class="btn-saas text-decoration-none" style="display: inline-flex; align-items: center; gap: 8px;">
+        <i class="bi bi-plus-circle"></i> Nuevo pedido
+    </a>
+</div>
+
+<div class="mb-4">
+    <form asp-action="Index" method="get" class="d-flex gap-2">
+        <div class="position-relative flex-grow-1" style="max-width: 400px;">
+            <i class="bi bi-search position-absolute" style="left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 0.9rem;"></i>
+            <input name="nombre" type="text" class="form-control bg-dark text-white border-secondary ps-5"
+                   placeholder="Buscar pedido por nombre del cliente..."
+                   style="font-size: 0.85rem; height: 38px; --bs-secondary-color: var(--text-secondary); --bs-form-control-bg: var(--bg-card);" />
+        </div>
+        <button type="submit" class="btn-saas px-3 text-decoration-none"> Filtrar</button>
+    </form>
+</div>
+
+<div class="saas-card p-0 overflow-hidden" style="padding: 0; border-radius: 8px;">
+
+    <div class="d-flex align-items-center px-3 py-2 border-bottom flex-shrink-0 text-center"
+         style="border-color: var(--border-color) !important; background-color: rgba(255,255,255,0.03); font-size: 0.7rem;
+                color: var(--text-secondary); font-weight: 600;">
+        <div style="width: 8%">Id</div>
+        <div style="width: 15%">Fecha y hora</div>
+        <div style="width: 22%">Nombre del cliente</div>
+        <div style="width: 10%">Mesa</div>
+        <div style="width: 15%">Tipo de pedido</div>
+        <div style="width: 12%">Estado</div>
+        <div style="width: 18%">Acciones</div>
+    </div>
+
+    <div class="list-group list-group-flush">
+        @foreach (var item in Model)
+        {
+            <div class="list-group-item bg-transparent border-secondary d-flex align-items-center px-3 py-3 flex-shrink-0 text-center"
+                 style="border-color: var(--border-color) !important; cursor: default; font-size: 0.85rem; color: var(--text-primary);">
+
+                <div style="width: 8%; font-weight: 500;">@item.Id</div>
+                <div style="width: 15%">@item.FechaDeCreacion.ToString("dd/MM/yyyy HH:mm")</div>
+                <div style="width: 22%; font-weight: 500;">@item.NombreDelCliente</div>
+                <div style="width: 10%">Mesa @item.NumeroDeMesa</div>
+                <div style="width: 15%">@Html.DisplayFor(modelItem => item.TipoDePedido)</div>
+                <div style="width: 12%">
+                    @{
+                        var estadoColorClass = item.Estado switch
+                        {
+                            GestorDeRestaurante.Dominio.Entidades.EstadoPedido.Pendiente => "text-warning",
+                            GestorDeRestaurante.Dominio.Entidades.EstadoPedido.Facturado => "text-success",
+                            GestorDeRestaurante.Dominio.Entidades.EstadoPedido.Cancelado => "text-danger",
+                            _ => "text-secondary"
+                        };
+                    }
+                    <span class="badge rounded-pill bg-dark border border-secondary @estadoColorClass" style="font-size: 0.7rem; padding: 0.4em 0.8em;">
+                        @Html.DisplayFor(modelItem => item.Estado)
+                    </span>
+                </div>
+                <div class="flex-shrink-0" style="width: 18%; text-align: right; display: flex; gap: 4px; justify-content: flex-end;">
+                    @{
+                        var puedeEditarOCancelar = item.Estado != GestorDeRestaurante.Dominio.Entidades.EstadoPedido.Cancelado && 
+                                                 item.Estado != GestorDeRestaurante.Dominio.Entidades.EstadoPedido.Facturado;
+                    }
+                    @if (puedeEditarOCancelar)
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id"
+                           class="btn btn-sm btn-outline-info px-2 py-1"
+                           style="font-size: 0.8rem; border-radius: 4px;">
+                            <i class="bi bi-pencil-square"></i> Editar
+                        </a>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-sm btn-outline-info px-2 py-1 disabled"
+                                style="font-size: 0.8rem; border-radius: 4px;" disabled>
+                            <i class="bi bi-pencil-square"></i> Editar
+                        </button>
+                    }
+                    <a asp-action="Detalles" asp-route-id="@item.Id"
+                       class="btn btn-sm btn-outline-success px-2 py-1"
+                       style="font-size: 0.8rem; border-radius: 4px;">
+                        <i class="bi bi-journal-text"></i> Detalles
+                    </a>
+                    @if (puedeEditarOCancelar)
+                    {
+                        <a asp-action="Cancel" asp-route-id="@item.Id"
+                           class="btn btn-sm btn-outline-danger px-2 py-1"
+                           style="font-size: 0.8rem; border-radius: 4px;">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-sm btn-outline-danger px-2 py-1 disabled"
+                                style="font-size: 0.8rem; border-radius: 4px;" disabled>
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </button>
+                    }
+                </div>
+            </div>
+        }
+
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5 text-dim" style="font-size: 0.85rem;">
+                <i class="bi bi-clipboard-x d-block mb-2" style="font-size: 2rem; opacity: 0.5;"></i>
+                No se encontraron pedidos registrados en el sistema.
+            </div>
+        }
+    </div>
+</div>

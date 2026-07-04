@@ -1,0 +1,82 @@
+﻿@model GestorDeRestaurante.Dominio.Entidades.Receta
+
+@{
+    ViewData["Title"] = "Detalle de receta";
+}
+
+<div class="mb-3">
+    <a asp-action="Index" class="text-decoration-none text-dim" style="font-size: 0.85rem; display: inline-flex; align-items: center; gap: 4px;">
+        <i class="bi bi-arrow-left"></i> Volver a la lista
+    </a>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 style="font-weight: 700; font-size: 1.5rem; margin: 0;">Detalles de la receta</h2>
+    </div>
+    <a asp-action="AgregarIngrediente" asp-route-recetaId="@Model.Id" class="btn-saas text-decoration-none" style="display: inline-flex; align-items: center; gap: 8px;">
+        <i class="bi bi-plus-circle"></i> Agregar ingrediente
+    </a>
+</div>
+
+<div class="saas-card p-4 mb-4" style="border-radius: 8px;">
+
+    <h5 style="color: var(--text-primary); font-size: 1rem; margin-bottom: 1rem; font-weight: 600;">Información general</h5>
+    <div class="d-flex flex-wrap gap-5 mb-5 pb-2 border-bottom" style="border-color: var(--border-color) !important;">
+        <div>
+            <div style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 600; margin-bottom: 4px;">Platillo</div>
+            <div style="color: var(--text-primary); font-size: 0.95rem; font-weight: 500;">@Model.Platillo.Nombre</div>
+        </div>
+        <div>
+            <div style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 600; margin-bottom: 4px;">Nombre de la receta</div>
+            <div style="color: var(--text-primary); font-size: 0.95rem; font-weight: 500;">@Model.Nombre</div>
+        </div>
+        <div>
+            <div style="font-size: 0.7rem; color: var(--text-secondary); font-weight: 600; margin-bottom: 4px;">Porciones que produce</div>
+            <div style="color: var(--text-primary); font-size: 0.95rem; font-weight: 500;">@Model.PorcionesQueProduce</div>
+        </div>
+    </div>
+
+    <h5 style="color: var(--text-primary); font-size: 1rem; margin-bottom: 1rem; font-weight: 600;">Ingredientes de la receta</h5>
+    <div class="saas-card p-0 overflow-hidden" style="padding: 0; border-radius: 8px; border: 1px solid var(--border-color);">
+
+        <div class="d-flex align-items-center px-3 py-2 border-bottom flex-shrink-0"
+             style="border-color: var(--border-color) !important; background-color: rgba(255,255,255,0.03); font-size: 0.7rem;
+                    color: var(--text-secondary); font-weight: 600;">
+            <div style="width: 30%">Ingrediente</div>
+            <div style="width: 15%">Unidad</div>
+            <div style="width: 15%; text-align: center;">Cantidad</div>
+            <div style="width: 25%">Observación</div>
+            <div style="width: 15%; text-align: right;">Acciones</div>
+        </div>
+
+        <div class="list-group list-group-flush">
+            @foreach (var item in Model.RecetaIngredientes)
+            {
+                <div class="list-group-item bg-transparent border-secondary d-flex align-items-center px-3 py-3 flex-shrink-0"
+                     style="border-color: var(--border-color) !important; cursor: default; font-size: 0.85rem; color: var(--text-primary)">
+
+                    <div style="width: 30%; font-weight: 500;">@item.Ingrediente.Nombre</div>
+                    <div style="width: 15%">@item.Ingrediente.UnidadDeMedida</div>
+                    <div style="width: 15%; text-align: center; font-weight: 600;">@item.Cantidad</div>
+                    <div style="width: 25%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 10px;">@item.Obsvacion</div>
+                    <div class="flex-shrink-0" style="width: 15%; text-align: right;">
+                        <a asp-action="EliminarIngrediente" asp-route-id="@item.Id" asp-route-recetaId="@Model.Id"
+                           class="btn btn-sm btn-outline-danger px-2 py-1"
+                           style="font-size: 0.8rem; border-radius: 4px;">
+                            <i class="bi bi-trash"></i> Eliminar
+                        </a>
+                    </div>
+                </div>
+            }
+
+            @if (!Model.RecetaIngredientes.Any())
+            {
+                <div class="text-center py-5 text-dim" style="font-size: 0.85rem;">
+                    <i class="bi bi-basket d-block mb-2" style="font-size: 2rem; opacity: 0.5;"></i>
+                    No hay ingredientes asociados a esta receta.
+                </div>
+            }
+        </div>
+    </div>
+</div>

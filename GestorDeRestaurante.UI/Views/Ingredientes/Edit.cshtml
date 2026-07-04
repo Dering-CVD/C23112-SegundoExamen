@@ -1,0 +1,60 @@
+﻿@model GestorDeRestaurante.Dominio.Entidades.Ingrediente
+@using GestorDeRestaurante.Dominio.Entidades
+
+@{
+    ViewData["Title"] = "Editar ingrediente";
+}
+
+<div class="container-fluid d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+    <div class="col-11 col-sm-8 col-md-6 col-lg-5">
+        <div class="saas-card shadow-lg" style="border-radius: 12px;">
+            <div class="mb-4">
+                <h3 style="font-weight: 700; font-size: 1.4rem; margin: 0;">Editar ingrediente</h3>
+            </div>
+
+            <form asp-action="Edit" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3" style="font-size: 0.85rem;"></div>
+                
+                <input type="hidden" asp-for="Id" />
+
+                <div class="mb-3">
+                    <label asp-for="Nombre" class="form-label text-dim" style="font-size: 0.8rem;">Nombre del ingrediente</label>
+                    <input asp-for="Nombre" class="form-control bg-dark text-white border-secondary" required />
+                    <span asp-validation-for="Nombre" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="UnidadDeMedida" class="form-label text-dim" style="font-size: 0.8rem;">Unidad de medida</label>
+                    <select asp-for="UnidadDeMedida" asp-items="Html.GetEnumSelectList<UnidadDeMedida>()" class="form-select bg-dark text-white border-secondary" required>
+                    </select>
+                    <span asp-validation-for="UnidadDeMedida" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CostoUnitario" class="form-label text-dim" style="font-size: 0.8rem;">Costo unitario</label>
+                    <input asp-for="CostoUnitario" class="form-control bg-dark text-white border-secondary" 
+                           type="number" step="0.0001"
+                           value="@Model.CostoUnitario.ToString("F4", System.Globalization.CultureInfo.InvariantCulture)" required />
+                    <span asp-validation-for="CostoUnitario" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="CantidadMinima" class="form-label text-dim" style="font-size: 0.8rem;">Cantidad mínima</label>
+                    <input asp-for="CantidadMinima" class="form-control bg-dark text-white border-secondary" required />
+                    <span asp-validation-for="CantidadMinima" class="text-danger small"></span>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn-saas py-2">Guardar cambios</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary text-dim" style="border-color: var(--border-color);">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

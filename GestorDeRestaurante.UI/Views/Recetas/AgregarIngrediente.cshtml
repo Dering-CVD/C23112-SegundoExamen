@@ -1,0 +1,60 @@
+﻿@model GestorDeRestaurante.Dominio.Entidades.RecetaDetalleIngrediente
+
+@{
+    ViewData["Title"] = "Agregar Ingrediente";
+}
+
+<div class="container-fluid d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+    <div class="col-11 col-sm-8 col-md-6 col-lg-5">
+        <div class="saas-card shadow-lg" style="border-radius: 12px;">
+            <div class="mb-4">
+                <h3 style="font-weight: 700; font-size: 1.4rem; margin: 0;">Agregar Ingrediente</h3>
+            </div>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert bg-dark border-secondary text-danger d-flex align-items-center mb-4" role="alert" style="font-size: 0.85rem;">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    @ViewBag.Error
+                </div>
+            }
+
+            <form asp-action="AgregarIngrediente" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3" style="font-size: 0.85rem;"></div>
+                <input type="hidden" name="IdReceta" value="@ViewBag.RecetaId" />
+                <input type="hidden" asp-for="IdReceta" value="@ViewBag.idReceta" />
+
+                <div class="mb-3">
+                    <label class="form-label text-dim" style="font-size: 0.8rem;">Ingrediente</label>
+                    <select asp-for="IdIngrediente" asp-items="ViewBag.IngredientesLista" class="form-select bg-dark text-white border-secondary" required>
+                        <option value="">Seleccione un ingrediente</option>
+                    </select>
+                    <span asp-validation-for="IdIngrediente" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-dim" style="font-size: 0.8rem;">Cantidad requerida</label>
+                    <input asp-for="Cantidad" class="form-control bg-dark text-white border-secondary" type="number" step="1" required />
+                    <span asp-validation-for="Cantidad" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label text-dim" style="font-size: 0.8rem;">Observación</label>
+                    <textarea asp-for="Obsvacion" class="form-control bg-dark text-white border-secondary" rows="3" style="resize: none;" placeholder="Ej. Cortado en cubos, tamizado, etc..."></textarea>
+                    <span asp-validation-for="Obsvacion" class="text-danger small"></span>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn-saas py-2">Agregar ingrediente</button>
+                    <a asp-action="Details" asp-route-id="@ViewBag.RecetaId" class="btn btn-outline-secondary text-dim" style="border-color: var(--border-color);">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

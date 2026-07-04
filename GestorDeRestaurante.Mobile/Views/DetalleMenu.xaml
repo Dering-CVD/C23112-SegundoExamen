@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GestorDeRestaurante.Mobile.Views.DetalleMenu"
+             Title="Detalle del platillo">
+
+    <ScrollView Padding="24">
+        <StackLayout Spacing="16">
+
+            <Label Text="{Binding Nombre}"
+                   FontSize="28" FontAttributes="Bold" />
+
+            <Label Text="{Binding Descripcion}"
+                   FontSize="16" TextColor="Gray" />
+
+            <BoxView HeightRequest="1" Color="LightGray" />
+
+            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="16" RowSpacing="8">
+
+                <Label Text="Categoría:" FontAttributes="Bold" />
+                <Label Text="{Binding Categoria}" Grid.Column="1" />
+
+                <Label Text="Precio:" FontAttributes="Bold" Grid.Row="1" />
+                <Label Text="{Binding PrecioDeVenta, StringFormat='₡{0:N2}'}"
+                       Grid.Row="1" Grid.Column="1"
+                       TextColor="Green" FontSize="22" FontAttributes="Bold" />
+
+                <Label Text="Estado:" FontAttributes="Bold" Grid.Row="2" />
+                <Label Text="{Binding Estado}"
+                       Grid.Row="2" Grid.Column="1" />
+
+            </Grid>
+
+            <BoxView HeightRequest="1" Color="LightGray" />
+
+            <Label Text="{Binding Observaciones, TargetNullValue=''}"
+                   FontSize="14" FontAttributes="Italic" TextColor="DarkGray" />
+
+        </StackLayout>
+    </ScrollView>
+
+</ContentPage>

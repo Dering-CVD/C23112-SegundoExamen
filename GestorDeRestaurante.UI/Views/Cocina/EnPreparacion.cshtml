@@ -1,0 +1,131 @@
+﻿@model IEnumerable<GestorDeRestaurante.Dominio.Dtos.CocinaDto.ListarPedidosEnPreparacionDto>
+
+@{
+    ViewData["Title"] = "Cocina - En Preparación";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 style="font-weight: 700; font-size: 1.5rem; margin: 0;">Cocina</h2>
+        <p class="text-dim">Módulo para la gestión y preparación de los platillos en proceso.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Index" class="btn-saas text-decoration-none" style="display: inline-flex; align-items: center; gap: 8px;">
+            <i class="bi bi-list-task"></i> Pendientes
+        </a>
+        <a asp-action="EnPreparacion" class="btn-saas text-decoration-none active" style="display: inline-flex; align-items: center; gap: 8px; background-color: rgba(255,255,255,0.15);">
+            <i class="bi bi-clock-history"></i> En preparación
+        </a>
+        <a asp-action="Atendidos" class="btn-saas text-decoration-none" style="display: inline-flex; align-items: center; gap: 8px;">
+            <i class="bi bi-check-circle"></i> Atendidos
+        </a>
+    </div>
+</div>
+
+<div class="mb-4">
+    <form method="get" class="d-flex gap-2">
+        <div class="position-relative flex-grow-1" style="max-width: 400px;">
+            <i class="bi bi-search position-absolute" style="left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 0.9rem;"></i>
+            <input name="buscar" type="text" class="form-control bg-dark text-white border-secondary ps-5"
+                   placeholder="Buscar por nombre del platillo..."
+                   style="font-size: 0.85rem; height: 38px; --bs-secondary-color: var(--text-secondary); --bs-form-control-bg: var(--bg-card);" />
+        </div>
+        <button type="submit" class="btn-saas px-3 text-decoration-none">Filtrar</button>
+    </form>
+</div>
+
+<div class="saas-card overflow-hidden" style="padding: 0 !important; border-radius: 8px;">
+    <div class="d-flex align-items-center px-3 py-2 border-bottom flex-shrink-0 text-center"
+         style="border-color: var(--border-color) !important; background-color: rgba(255,255,255,0.03); font-size: 0.7rem;
+        color: var(--text-secondary); font-weight: 600;">
+        <div style="width: 8%">Número de pedido</div>
+        <div style="width: 22%">Platillo</div>
+        <div style="width: 8%;">Cantidad</div>
+        <div style="width: 10%;">Fecha de inicio</div>
+        <div style="width: 12%;">Tiempo transcurrido</div>
+        <div style="width: 15%">Observaciones</div>
+        <div style="width: 25%;">Acciones</div>
+    </div>
+
+    <div class="list-group list-group-flush">
+        @foreach (var item in Model)
+        {
+            <div class="list-group-item bg-transparent border-secondary d-flex align-items-center px-3 py-3 flex-shrink-0 text-center"
+                 style="border-color: var(--border-color) !important; cursor: default; font-size: 0.85rem; color: var(--text-primary);">
+
+                <div style="width: 8%;">@item.IdPedido</div>
+                <div style="width: 22%;">@item.NombreDelPlatillo</div>
+                <div style="width: 8%;">@item.Cantidad</div>
+                <div style="width: 10%;">@item.FechaDeInicio</div>
+                <div style="width: 12%; tabular-nums;">@item.TiempoTranscurrido.ToString().Split('.')[0]</div>
+                <div style="width: 15%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="@item.Observaciones">
+                    @(string.IsNullOrEmpty(item.Observaciones) ? "Sin Observaciones" : item.Observaciones)
+                </div>
+
+                <div style="width: 15%; text-align: right;">
+                    <button type="button" class="btn btn-sm btn-outline-success"
+                            onclick="abrirAtencion(@item.Id)"
+                            style="font-size: 0.8rem; border-radius: 4px;">
+                        <i class="bi bi-check-lg"></i> Atendido
+                    </button>
+                </div>
+            </div>
+        }
+
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5 text-dim" style="font-size: 0.85rem;">
+                <i class="bi bi-clock d-block mb-2" style="font-size: 2rem; opacity: 0.5;"></i>
+                No hay platillos en preparación actualmente.
+            </div>
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="confirmarAtencionModal" tabindex="-1" style="background-color: rgba(0,0,0,0.8);">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background-color: var(--bg-card); border: 1px solid var(--border-color); color: white;">
+            <div class="modal-header border-bottom" style="border-color: var(--border-color) !important;">
+                <h5 class="modal-title">Marcar como atendido</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Confirmas que el platillo ha sido terminado y entregado?</p>
+                <div class="mb-3">
+                    <label class="form-label" style="font-size: 0.8rem; color: var(--text-secondary);">Notas de cocina (Opcional)</label>
+                    <textarea id="obsAtencion" class="form-control bg-dark text-white border-secondary"
+                              maxlength="200" style="font-size: 0.85rem; height: 80px;"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer border-top" style="border-color: var(--border-color) !important;">
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnConfirmarAtencion" class="btn btn-sm btn-success">Confirmar atención</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function abrirAtencion(id) {
+        document.getElementById('obsAtencion').value = '';
+
+        const modal = new bootstrap.Modal(document.getElementById('confirmarAtencionModal'));
+
+        document.getElementById('btnConfirmarAtencion').onclick = function() {
+            const observacion = document.getElementById('obsAtencion').value;
+
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/Cocina/MarcarAtendido';
+
+            form.innerHTML = `
+                <input type="hidden" name="id" value="${id}">
+                <input type="hidden" name="observacion" value="${observacion}">
+            `;
+            document.body.appendChild(form);
+            form.submit();
+        };
+
+        modal.show();
+    }
+</script>

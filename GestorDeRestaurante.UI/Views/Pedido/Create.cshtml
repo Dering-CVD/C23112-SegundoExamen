@@ -1,0 +1,58 @@
+﻿@model GestorDeRestaurante.Dominio.Entidades.Pedido
+
+@{
+    ViewData["Title"] = "Crear pedido";
+}
+
+<div class="container-fluid d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+    <div class="col-11 col-sm-8 col-md-6 col-lg-5">
+        <div class="saas-card shadow-lg" style="border-radius: 12px;">
+            <div class="mb-4">
+                <h3 style="font-weight: 700; font-size: 1.4rem; margin: 0;">Crear pedido</h3>
+            </div>
+
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3" style="font-size: 0.85rem;"></div>
+
+                <div class="mb-3">
+                    <label class="form-label text-dim" style="font-size: 0.8rem;">Nombre del cliente</label>
+                    <input asp-for="NombreDelCliente" class="form-control bg-dark text-white border-secondary" placeholder="Ej: Juan García (o dejar vacío para genérico)" />
+                    <span asp-validation-for="NombreDelCliente" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-dim" style="font-size: 0.8rem;">Número de mesa</label>
+                    <input asp-for="NumeroDeMesa" type="number" min="1" max="10" class="form-control bg-dark text-white border-secondary" placeholder="Ej: 5" required />
+                    <span asp-validation-for="NumeroDeMesa" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-dim" style="font-size: 0.8rem;">Tipo de pedido</label>
+                    <select asp-for="TipoDePedido" asp-items="Html.GetEnumSelectList<GestorDeRestaurante.Dominio.Entidades.TipoDePedido>()"
+                            class="form-select bg-dark text-white border-secondary" required>
+                        <option value="" disabled selected hidden>-- Seleccionar tipo --</option>
+                    </select>
+                    <span asp-validation-for="TipoDePedido" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label text-dim" style="font-size: 0.8rem;">Observaciones generales (Opcional)</label>
+                    <textarea asp-for="Observaciones" rows="3" maxlength="300" placeholder="Ej: Cliente solicita mesa cerca de la ventana..." class="form-control bg-dark text-white border-secondary" style="resize: none;"></textarea>
+                    <span asp-validation-for="Observaciones" class="text-danger small"></span>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn-saas py-2">Registrar pedido</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary text-dim" style="border-color: var(--border-color);">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

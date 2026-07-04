@@ -1,0 +1,143 @@
+@{
+    ViewData["Title"] = "Historial de Pedidos";
+    var fechaInicial = ViewBag.FechaInicial;
+    var fechaFinal = ViewBag.FechaFinal;
+    var estadoSeleccionado = ViewBag.EstadoSeleccionado as string;
+    var resultados = ViewBag.Resultados as List<GestorDeRestaurante.Dominio.Entidades.Pedido>;
+    var desglosePedidos = ViewBag.DesglosePedidos as Dictionary<int, (decimal subtotal, decimal impuesto, decimal total)>;
+    var huboConsulta = ViewBag.HuboConsulta ?? false;
+    var mensajeVacio = ViewBag.MensajeVacio;
+
+    var hoy = DateTime.Now.ToString("yyyy-MM-dd");
+    var fechaInicialValor = !string.IsNullOrEmpty(fechaInicial) ? fechaInicial : hoy;
+    var fechaFinalValor = !string.IsNullOrEmpty(fechaFinal) ? fechaFinal : hoy;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 style="font-weight: 700; font-size: 1.5rem; margin: 0;">Historial de Pedidos</h2>
+        <p class="text-dim mb-0">Consulta de pedidos por rango de fechas.</p>
+    </div>
+</div>
+
+@if (ViewData.ModelState.ErrorCount > 0)
+{
+    <div class="alert bg-dark border-secondary text-danger d-flex align-items-center mb-4" role="alert" style="font-size: 0.85rem;">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <div>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(m => m.Errors))
+            {
+                <span>@error.ErrorMessage</span><br />
+            }
+        </div>
+        <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="mb-4">
+    <form method="post" class="d-flex align-items-end gap-3" onsubmit="return validarFechas();">
+        @Html.AntiForgeryToken()
+
+        <div>
+            <label for="fechaInicial" class="form-label text-dim mb-1" style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Fecha Inicial</label>
+            <input type="date" id="fechaInicial" name="fechaInicial" class="form-control bg-dark text-white border-secondary"
+                   value="@fechaInicialValor" required style="font-size: 0.85rem; height: 38px; color-scheme: dark; width: 160px;" />
+        </div>
+
+        <div>
+            <label for="fechaFinal" class="form-label text-dim mb-1" style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Fecha Final</label>
+            <input type="date" id="fechaFinal" name="fechaFinal" class="form-control bg-dark text-white border-secondary"
+                   value="@fechaFinalValor" required style="font-size: 0.85rem; height: 38px; color-scheme: dark; width: 160px;" />
+        </div>
+
+        <div>
+            <label for="estado" class="form-label text-dim mb-1" style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">Estado</label>
+            <select id="estado" name="estado" class="form-select bg-dark text-white border-secondary" style="font-size: 0.85rem; height: 38px; width: 180px;">
+                <option value="">Todos los estados</option>
+                <option value="Pendiente" selected="@(estadoSeleccionado == "Pendiente")">Pendiente</option>
+                <option value="Atendido" selected="@(estadoSeleccionado == "Atendido")">Atendido</option>
+                <option value="Facturado" selected="@(estadoSeleccionado == "Facturado")">Facturado</option>
+                <option value="Cancelado" selected="@(estadoSeleccionado == "Cancelado")">Cancelado</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn-saas px-4 text-decoration-none" style="height: 38px; display: flex; align-items: center; gap: 6px;">
+            <i class="bi bi-search"></i> Buscar
+        </button>
+    </form>
+</div>
+
+@if (huboConsulta)
+{
+    @if (resultados == null || !resultados.Any())
+    {
+        <div class="text-center py-5 text-dim" style="font-size: 0.85rem;">
+            <i class="bi bi-search d-block mb-2" style="font-size: 2rem; opacity: 0.5;"></i>
+            @mensajeVacio
+        </div>
+    }
+    else
+    {
+        <div class="mb-3 d-flex justify-content-between align-items-center">
+            <span class="text-dim" style="font-size: 0.85rem;">
+                Mostrando <strong class="text-white">@resultados.Count</strong> resultados del @DateTime.Parse(fechaInicial).ToString("dd/MM/yyyy") al @DateTime.Parse(fechaFinal).ToString("dd/MM/yyyy")
+            </span>
+        </div>
+
+        <div class="saas-card p-0 overflow-hidden mb-4" style="padding: 0; border-radius: 8px;">
+
+            <div class="d-flex align-items-center px-3 py-2 border-bottom flex-shrink-0 text-center"
+                 style="border-color: var(--border-color) !important; background-color: rgba(255,255,255,0.03); font-size: 0.7rem;
+                        color: var(--text-secondary); font-weight: 600;">
+                <div style="width: 25%">Numero de pedido</div>
+                <div style="width: 25%">Fecha</div>
+                <div style="width: 25%">Cliente</div>
+                <div style="width: 25%;">Estado</div>
+            </div>
+
+            <div class="list-group list-group-flush">
+                @foreach (var item in resultados)
+                {
+                    var estadoClases = item.Estado switch
+                    {
+                        GestorDeRestaurante.Dominio.Entidades.EstadoPedido.Pendiente => "text-warning",
+                        GestorDeRestaurante.Dominio.Entidades.EstadoPedido.Atendido => "text-info",
+                        GestorDeRestaurante.Dominio.Entidades.EstadoPedido.Facturado => "text-success",
+                        GestorDeRestaurante.Dominio.Entidades.EstadoPedido.Cancelado => "text-danger bg-danger bg-opacity-10",
+                        _ => "text-secondary"
+                    };
+
+                    var desglose = desglosePedidos != null && desglosePedidos.ContainsKey(item.Id)
+                        ? desglosePedidos[item.Id]
+                        : (0m, 0m, 0m);
+
+                    <div class="list-group-item bg-transparent border-secondary d-flex align-items-center px-3 py-3 flex-shrink-0 text-center"
+                         style="border-color: var(--border-color) !important; cursor: default; font-size: 0.85rem; color: var(--text-primary);">
+
+                        <div style="width: 25%; font-weight: 600;">@item.Id</div>
+                        <div style="width: 25%;">@item.FechaDeCreacion.ToString("dd/MM/yyyy HH:mm")</div>
+                        <div style="width: 25%; font-weight: 500;" class="text-truncate pe-2">@item.NombreDelCliente</div>
+                        <div style="width: 25%;">
+                            <span class="badge rounded-pill bg-dark border border-secondary @estadoClases" style="font-size: 0.7rem; padding: 0.4em 0.8em;">
+                                @item.Estado
+                            </span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+}
+
+<script>
+    function validarFechas() {
+        const fechaInicial = document.getElementById('fechaInicial').value;
+        const fechaFinal = document.getElementById('fechaFinal').value;
+
+        if (fechaInicial > fechaFinal) {
+            alert('La fecha inicial no puede ser posterior a la fecha final.');
+            return false;
+        }
+        return true;
+    }
+</script>
