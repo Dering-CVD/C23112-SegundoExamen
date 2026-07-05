@@ -1,0 +1,60 @@
+﻿@model IEnumerable<SistemaAlquilerPlaya.UI.Models.AlquilerViewModel>
+
+<h2>Artículos alquilados</h2>
+
+<table class="table table-bordered">
+
+    <thead>
+
+        <tr>
+
+            <th>Cliente</th>
+
+            <th>Artículo</th>
+
+            <th>Hora Inicio</th>
+
+            <th>Horas</th>
+
+            <th>Monto</th>
+
+            <th></th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>@item.NombreCliente</td>
+
+                <td>@item.NombreArticulo</td>
+
+                <td>@item.HoraInicio</td>
+
+                <td>@item.CantidadHoras</td>
+
+                <td>@item.MontoTotal</td>
+
+                <td>
+
+                    <a asp-action="Devolver"
+                       asp-route-articuloId="@item.ArticuloId"
+                       class="btn btn-danger">
+
+                        Devolver
+
+                    </a>
+
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>

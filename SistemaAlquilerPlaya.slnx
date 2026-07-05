@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="GestorDeRestaurante.AccesoADatos/SistemaAlquilerPlaya.AccesoADatos.csproj" />
+  <Project Path="GestorDeRestaurante.API/SistemaAlquilerPlaya.API.csproj" Id="75f4f135-6bf4-486c-aa47-2ea6b2a80dfa" />
+  <Project Path="GestorDeRestaurante.Dominio/SistemaAlquilerPlaya.Dominio.csproj" />
+  <Project Path="GestorDeRestaurante.LogicaDeNegocios/SistemaAlquilerPlaya.LogicaDeNegocios.csproj" />
+  <Project Path="GestorDeRestaurante.UI/SistemaAlquilerPlaya.UI.csproj" />
+</Solution>

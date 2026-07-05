@@ -1,0 +1,52 @@
+﻿@model SistemaAlquilerPlaya.UI.Models.AlquilerViewModel
+
+<h2>Alquilar artículo</h2>
+
+<form asp-action="Alquilar">
+
+    <input asp-for="ArticuloId" type="hidden" />
+
+    <div class="mb-3">
+
+        <label>Identificación</label>
+
+        <input asp-for="IdentificacionCliente"
+               class="form-control" />
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Nombre</label>
+
+        <input asp-for="NombreCliente"
+               class="form-control" />
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Hora de inicio</label>
+
+        <input asp-for="HoraInicio"
+               type="datetime-local"
+               class="form-control" />
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Cantidad de horas</label>
+
+        <input asp-for="CantidadHoras"
+               class="form-control" />
+
+    </div>
+
+    <button class="btn btn-success">
+
+        Confirmar alquiler
+
+    </button>
+
+</form>

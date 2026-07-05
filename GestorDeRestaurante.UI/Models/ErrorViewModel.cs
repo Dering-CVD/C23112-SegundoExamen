@@ -1,4 +1,4 @@
-namespace GestorDeRestaurante.UI.Models
+namespace SistemaAlquilerPlaya.UI.Models
 {
     public class ErrorViewModel
     {

@@ -1,0 +1,63 @@
+﻿@model SistemaAlquilerPlaya.UI.Models.ArticuloViewModel
+
+<h2>Registrar Artículo</h2>
+
+<form asp-action="Crear">
+
+    <div class="mb-3">
+
+        <label>Nombre</label>
+
+        <input asp-for="Nombre" class="form-control"/>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Tipo</label>
+
+        <select asp-for="Tipo" class="form-select">
+
+            <option>Silla</option>
+
+            <option>Mesa</option>
+
+            <option>Sombrilla</option>
+
+            <option>Toldo</option>
+
+            <option>TablaSurf</option>
+
+            <option>Kayak</option>
+
+            <option>Otro</option>
+
+        </select>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Descripción</label>
+
+        <textarea asp-for="Descripcion"
+                  class="form-control"></textarea>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>Precio por hora</label>
+
+        <input asp-for="PrecioHora"
+               class="form-control"/>
+
+    </div>
+
+    <button class="btn btn-success">
+
+        Guardar
+
+    </button>
+
+</form>

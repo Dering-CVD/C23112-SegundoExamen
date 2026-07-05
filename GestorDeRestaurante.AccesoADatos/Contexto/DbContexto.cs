@@ -1,47 +1,33 @@
-﻿using GestorDeRestaurante.Dominio.Entidades;
+﻿using SistemaAlquilerPlaya.Dominio.Entidades;
 using Microsoft.EntityFrameworkCore;
 
 namespace GestorDeRestaurante.AccesoADatos.Contexto;
 
 public class DbContexto : DbContext
 {
-    public DbContexto(DbContextOptions<DbContexto> opciones) : base(opciones)
+    public DbContexto(DbContextOptions<DbContexto> opciones)
+        : base(opciones)
     {
     }
 
-    public DbSet<Platillo> Platillos { get; set; }
+    public DbSet<Articulo> Articulos { get; set; }
 
-    public DbSet<Usuario> Usuarios { get; set; }
-    public DbSet<Pedido> Pedido { get; set; }
-    public DbSet<PedidoDetalle> PedidoDetalle { get; set; }
-    public DbSet<Receta> Receta { get; set; }
-    public DbSet<Ingrediente> Ingredientes { get; set; }
-    public DbSet<RecetaDetalleIngrediente> RecetaDetalleIngredientes { get; set; }
-    public DbSet<Factura> Facturas { get; set; }
-    public DbSet<FacturaDetalle> FacturaDetalle { get; set; }
+    public DbSet<Alquiler> Alquileres { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Alquiler>()
+            .HasOne(a => a.Articulo)
+            .WithMany()
+            .HasForeignKey(a => a.ArticuloId);
 
-        modelBuilder.Entity<Ingrediente>()
-        .Property(i => i.UnidadDeMedida)
-        .HasConversion<int>();
+        modelBuilder.Entity<Articulo>()
+            .Property(a => a.PrecioHora)
+            .HasColumnType("decimal(18,2)");
 
-        modelBuilder.Entity<Usuario>()
-        .Property(u => u.Rol)
-        .HasConversion<string>();
-
-        modelBuilder.Entity<Usuario>().HasData(new Usuario
-        {
-            Id = 1,
-            Identificacion = "",
-            Nombre = "",
-            Apellidos = "",
-            NombreUsuario = "Administrador",
-            Email = "proyectorestaurante64@gmail.com",
-            Contrasena = "Nuevo123*",
-            Rol = Rol.Administrador
-        }
-        );
+        modelBuilder.Entity<Alquiler>()
+            .Property(a => a.MontoTotal)
+            .HasColumnType("decimal(18,2)");
     }
 }

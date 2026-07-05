@@ -1,14 +1,17 @@
-using GestorDeRestaurante.UI.Servicios;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using SistemaAlquilerPlaya.Dominio.Entidades;
+using SistemaAlquilerPlaya.UI.Servicios;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<IServicioDeSesion, ServicioDeSesion>();
 
 builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddSession();
 
 builder.Services.AddControllersWithViews();
+
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
@@ -36,6 +39,4 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
-
 app.Run();

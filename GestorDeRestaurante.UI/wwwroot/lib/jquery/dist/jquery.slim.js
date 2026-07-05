@@ -4112,7 +4112,10 @@ Data.prototype = {
 			}
 		}
 	},
-	hasData: function( owner ) {
+	
+	
+	
+	: function(owner) {
 		var cache = owner[ this.expando ];
 		return cache !== undefined && !jQuery.isEmptyObject( cache );
 	}

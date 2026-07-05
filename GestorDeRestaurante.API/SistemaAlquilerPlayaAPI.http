@@ -1,0 +1,6 @@
+@SistemaAlquilerPlaya.API_HostAddress = http://localhost:6428
+
+GET {{SistemaAlquilerPlaya.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

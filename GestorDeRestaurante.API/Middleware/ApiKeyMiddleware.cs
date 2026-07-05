@@ -1,4 +1,4 @@
-﻿namespace GestorDeRestaurante.API
+﻿namespace SistemaAlquilerPlaya.API
 {
     public class ApiKeyMiddleware
     {

@@ -1,8 +1,11 @@
-using GestorDeRestaurante.AccesoADatos.Contexto;
-using GestorDeRestaurante.API;
-using GestorDeRestaurante.LogicaDeNegocios.Interfaces;
-using GestorDeRestaurante.LogicaDeNegocios.Servicios;
+using SistemaAlquilerPlaya.AccesoADatos.Contexto;
+using SistemaAlquilerPlaya.API;
+using SistemaAlquilerPlaya.LogicaDeNegocios.Interfaces;
+using SistemaAlquilerPlaya.LogicaDeNegocios.Servicios;
 using Microsoft.EntityFrameworkCore;
+using SistemaAlquilerPlaya.AccesoADatos.Interfaces;
+using SistemaAlquilerPlaya.AccesoADatos.Repositorio;
+using SistemaAlquilerPlaya.AccesoADatos.Servicios;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,15 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<DbContexto>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddScoped<IServicioDeAutenticacion, ServicioDeAutenticacion>();
-builder.Services.AddScoped<IServicioDeMenu, ServicioDeMenu>();
-builder.Services.AddScoped<IServicioDeRecetas, ServicioDeRecetas>();
-builder.Services.AddScoped<IServicioDeIngrediente, ServicioDeIngrediente>();
-builder.Services.AddScoped<IServicioDeFacturacion, ServicioDeFacturacion>();
-builder.Services.AddScoped<IServicioDeUsuario, ServicioDeUsuario>();
-builder.Services.AddScoped<IServicioDeCocina, ServicioDeCocina>();
-builder.Services.AddTransient<IServicioDeEmail, ServicioDeEmail>();
-builder.Services.AddScoped<IServicioDePedido, ServicioDePedido>();
+
+builder.Services.AddScoped<IArticuloRepositorio, ArticuloRepositorio>();
+builder.Services.AddScoped<IAlquilerRepositorio, AlquilerRepositorio>();
+builder.Services.AddScoped<IArticuloBL, ArticuloBL>();
+builder.Services.AddScoped<IAlquilerBL, AlquilerBL>();
 
 builder.Services.AddControllers().AddJsonOptions(opciones => opciones.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddOpenApi();
