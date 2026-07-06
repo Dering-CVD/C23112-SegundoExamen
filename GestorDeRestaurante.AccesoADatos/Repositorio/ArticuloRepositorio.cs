@@ -1,4 +1,4 @@
-﻿using GestorDeRestaurante.AccesoADatos.Contexto;
+﻿using SistemaAlquilerPlaya.AccesoADatos.Contexto;
 using SistemaAlquilerPlaya.Dominio.Entidades;
 using SistemaAlquilerPlaya.AccesoADatos.Interfaces;
 using Microsoft.EntityFrameworkCore;

@@ -1,7 +1,7 @@
 ﻿using SistemaAlquilerPlaya.Dominio.Entidades;
 using Microsoft.EntityFrameworkCore;
 
-namespace GestorDeRestaurante.AccesoADatos.Contexto;
+namespace SistemaAlquilerPlaya.AccesoADatos.Contexto;
 
 public class DbContexto : DbContext
 {

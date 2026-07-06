@@ -1,9 +1,9 @@
-﻿using GestorDeRestaurante.Dominio.Entidades;
+﻿using SistemaAlquilerPlaya.Dominio.Entidades;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 
-namespace GestorDeRestaurante.UI.Servicios;
+namespace SistemaAlquilerPlaya.UI.Servicios;
 
 public class ServicioDeSesion : IServicioDeSesion
 {

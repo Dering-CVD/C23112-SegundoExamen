@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GestorDeRestaurante.AccesoADatos\SistemaAlquilerPlaya.AccesoADatos.csproj" />
-    <ProjectReference Include="..\GestorDeRestaurante.Dominio\SistemaAlquilerPlaya.Dominio.csproj" />
+    <ProjectReference Include="..\SistemaAlquilerPlaya.AccesoADatos\SistemaAlquilerPlaya.AccesoADatos.csproj" />
+    <ProjectReference Include="..\SistemaAlquilerPlaya.Dominio\SistemaAlquilerPlaya.Dominio.csproj" />
   </ItemGroup>
 
 </Project>

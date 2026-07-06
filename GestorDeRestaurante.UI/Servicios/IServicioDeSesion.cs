@@ -1,6 +1,6 @@
-﻿using GestorDeRestaurante.Dominio.Entidades;
+﻿using SistemaAlquilerPlaya.Dominio.Entidades;
 
-namespace GestorDeRestaurante.UI.Servicios;
+namespace SistemaAlquilerPlaya.UI.Servicios;
 
 public interface IServicioDeSesion
 {

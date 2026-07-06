@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GestorDeRestaurante.Dominio\SistemaAlquilerPlaya.Dominio.csproj" />
+    <ProjectReference Include="..\SistemaAlquilerPlaya.Dominio\SistemaAlquilerPlaya.Dominio.csproj" />
   </ItemGroup>
 
 </Project>
